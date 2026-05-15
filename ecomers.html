@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopEasy - E-Commerce</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Navbar */
+nav{
+    background:#111;
+    color:white;
+    padding:15px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+nav h2{
+    color:#00c896;
+}
+
+.cart{
+    cursor:pointer;
+}
+
+/* Hero Section */
+.hero{
+    background:linear-gradient(to right,#00c896,#007bff);
+    color:white;
+    text-align:center;
+    padding:60px 20px;
+}
+
+.hero h1{
+    font-size:40px;
+}
+
+/* Products */
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:40px 50px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    padding:20px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.card h3{
+    margin:10px 0;
+}
+
+.card button{
+    background:#00c896;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.card button:hover{
+    background:#007bff;
+}
+
+/* Cart Section */
+.cart-section{
+    position:fixed;
+    right:0;
+    top:0;
+    width:300px;
+    height:100vh;
+    background:white;
+    box-shadow:-5px 0 10px rgba(0,0,0,0.2);
+    padding:20px;
+    transform:translateX(100%);
+    transition:0.3s;
+    overflow-y:auto;
+}
+
+.cart-section.active{
+    transform:translateX(0);
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.total{
+    font-weight:bold;
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <h2>ShopEasy</h2>
+    <div class="cart" onclick="toggleCart()">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Welcome to ShopEasy</h1>
+    <p>Your favorite products at best prices</p>
+</section>
+
+<section class="products" id="product-list">
+</section>
+
+<div class="cart-section" id="cart">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="total">Total: ₹<span id="total">0</span></div>
+</div>
+
+<script>
+const products = [
+    {id:1, name:"Smart Watch", price:2999, image:"https://picsum.photos/300?1"},
+    {id:2, name:"Headphones", price:1999, image:"https://picsum.photos/300?2"},
+    {id:3, name:"Shoes", price:2499, image:"https://picsum.photos/300?3"},
+    {id:4, name:"Backpack", price:1499, image:"https://picsum.photos/300?4"}
+];
+
+let cart = [];
+
+function displayProducts(){
+    const productList = document.getElementById("product-list");
+    products.forEach(product=>{
+        productList.innerHTML += `
+            <div class="card">
+                <img src="${product.image}">
+                <h3>${product.name}</h3>
+                <p>₹${product.price}</p>
+                <button onclick="addToCart(${product.id})">Add to Cart</button>
+            </div>
+        `;
+    });
+}
+
+function addToCart(id){
+    const product = products.find(p=>p.id===id);
+    cart.push(product);
+    updateCart();
+}
+
+function updateCart(){
+    const cartItems = document.getElementById("cart-items");
+    const cartCount = document.getElementById("cart-count");
+    const total = document.getElementById("total");
+
+    cartItems.innerHTML = "";
+    let sum = 0;
+
+    cart.forEach(item=>{
+        sum += item.price;
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <span>₹${item.price}</span>
+            </div>
+        `;
+    });
+
+    cartCount.innerText = cart.length;
+    total.innerText = sum;
+}
+
+function toggleCart(){
+    document.getElementById("cart").classList.toggle("active");
+}
+
+displayProducts();
+</script>
+
+</body>
+</html>
